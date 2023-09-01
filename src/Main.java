@@ -25,7 +25,7 @@ public class Main {
         /**
          * Вычислиям количество людей младше 18 лет
          */
-        
+
         long personCount = persons.stream()
                 .filter(person -> person.getAge() < 18)
                 .count();
@@ -35,7 +35,7 @@ public class Main {
          * и сортируем по фамилии
          */
         List<String> calledPeople = persons.stream()
-                .filter(person -> person.getSex().equals(Sex.MAN))
+                .filter(person -> person.getSex()== Sex.MAN)
                 .filter(person -> person.getAge() > 18)
                 .filter(person -> person.getAge() <= 27)
                 .map(person -> person.getFamily())
@@ -46,60 +46,15 @@ public class Main {
          * Выявляем людей с высшим образованием до пенсионного возраста и сортируем по фамилии
          */
         List<String> peopleForWorkHighEducation = persons.stream()
-                .filter(person -> person.getAge() >= 18 && person.getAge() <= 65 && person.getSex().equals(Sex.MAN)
-                        || person.getSex().equals(Sex.WOMAN) && person.getAge() <= 60 && person.getAge() >= 18)
-                .filter(person -> person.getEducation().equals(Education.HIGHER))
-                .sorted(Comparator.comparing(person -> person.getFamily()))
-                .map(person -> person.getFamily())
+                .filter(person -> person.getEducation() == Education.HIGHER)
+                .filter(person -> person.getAge() >= 18)
+                .filter(person -> person.getSex() == Sex.MAN ? person.getAge() <= 65
+                        : person.getAge() <= 60)
+                .sorted(Comparator.comparing(person ->  person.getFamily()))
+                .map(person -> person.getFamily() )
                 .collect(Collectors.toList());
         System.out.println();
         System.out.println("People with high education" + peopleForWorkHighEducation);
     }
 }
 
-class Person {
-    private String name;
-    private String family;
-    private Integer age;
-    private Sex sex;
-    private Education education;
-
-    public Person(String name, String family, int age, Sex sex, Education education) {
-        this.name = name;
-        this.family = family;
-        this.age = age;
-        this.sex = sex;
-        this.education = education;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getFamily() {
-        return family;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public Sex getSex() {
-        return sex;
-    }
-
-    public Education getEducation() {
-        return education;
-    }
-
-    @Override
-    public String toString() {
-        return "Person{" +
-                "name='" + name + '\'' +
-                ", family='" + family + '\'' +
-                ", age=" + age +
-                ", sex=" + sex +
-                ", education=" + education +
-                '}';
-    }
-}
